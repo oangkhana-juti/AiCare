@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>AiCare — คะแนนความเสี่ยงของคุณ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0E2A4E;
+    --blue-deep:#164C8C;
+    --blue:#2E7FDB;
+    --sky:#E8F2FC;
+    --mint:#1FAE84;
+    --mint-bg:#E4F7F1;
+    --amber:#F0A93B;
+    --amber-bg:#FDF1DE;
+    --coral:#E85D5D;
+    --coral-bg:#FCEAEA;
+    --violet:#7A6FD9;
+    --violet-bg:#EFEDFB;
+    --bg:#F3F6FB;
+    --card:#FFFFFF;
+    --ink:#16233D;
+    --ink-soft:#5B6B85;
+    --hair:#E4E9F1;
+    --radius-lg:20px;
+    --radius-md:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Sarabun',sans-serif;
+    background:#DCE4EF;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    justify-content:center;
+  }
+  .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    padding-bottom:88px;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.num{font-family:'Prompt',sans-serif;}
+
+  /* header */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 20px 14px;
+  }
+  .brand{display:flex;align-items:center;gap:9px;}
+  .brand-mark{width:34px;height:34px;flex-shrink:0;}
+  .brand span{font-family:'Prompt',sans-serif;font-weight:600;font-size:19px;color:var(--navy);}
+  .brand span em{font-style:normal;color:var(--blue);}
+  .head-icons{display:flex;align-items:center;gap:12px;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:50%;
+    background:var(--card);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    box-shadow:0 1px 2px rgba(14,42,78,.06);
+  }
+  .icon-btn .dot{
+    position:absolute;top:7px;right:8px;
+    width:7px;height:7px;border-radius:50%;
+    background:var(--coral);border:1.5px solid var(--card);
+  }
+  .avatar{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(145deg,var(--blue),var(--navy));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:'Prompt',sans-serif;font-weight:600;font-size:14px;
+  }
+
+  /* Mascot small (header) */
+  .mascot-small{
+    width:38px;height:38px;border-radius:50%;overflow:hidden;border:2px solid #fff;box-shadow:0 4px 12px rgba(7,20,50,0.1);
+    display:inline-block;object-fit:cover;
+  }
+
+  main{padding:0 20px;}
+
+  /* hero card */
+  .hero{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    padding:22px 20px 20px;
+    box-shadow:0 6px 20px rgba(14,42,78,.07);
+    margin-bottom:16px;
+    position:relative; /* positioning context for mascot-large */
+    overflow:visible;  /* allow mascot to overflow outside the card */
+  }
+  .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .hero-label{font-size:13px;color:var(--ink-soft);font-weight:500;margin-bottom:2px;}
+  .hero-title{font-size:17px;font-weight:600;color:var(--navy);}
+  .score-row{display:flex;align-items:baseline;gap:6px;margin-top:14px;}
+  .score-num{font-size:44px;font-weight:700;color:var(--navy);line-height:1;}
+  .score-den{font-size:16px;color:var(--ink-soft);font-weight:500;}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 12px;border-radius:999px;
+    font-size:12.5px;font-weight:600;margin-top:10px;
+  }
+  .pill.moderate{background:var(--amber-bg);color:#8A5A0C;}
+  .pill-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .hero-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:10px;}
+  .hero-cta{
+    margin-top:16px;
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--sky);color:var(--blue-deep);
+    font-size:13.5px;font-weight:600;
+    padding:9px 16px;border-radius:10px;
+    border:none;
+  }
+
+  /* gauge area: ensure svg sits above mascot */
+  .gauge-wrap{width:132px;flex-shrink:0;text-align:center;position:relative; z-index:3;}
+  .gauge-wrap svg{ position:relative; z-index:4; } /* SVG (วงแหวน) อยู่ด้านบน */
+  .gauge-num-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-top:2px;padding:0 4px;}
+
+  /* Large mascot overlapping hero/gauge (below the SVG) */
+  .mascot-large{
+    position:absolute;
+    right:10px;
+    bottom:-36px;    /* เลื่อนลงเพื่อไม่ทับวงแหวน (ปรับค่าได้ตามต้องการ) */
+    width:120px;
+    height:120px;
+    pointer-events:none;
+    transform:translateZ(0);
+    filter:drop-shadow(0 10px 30px rgba(30,55,100,0.12));
+    z-index:1;       /* ให้มาสคอตอยู่ใต้ SVG วงแหวน */
+  }
+  .mascot-large img{width:100%;height:100%;object-fit:contain;display:block;}
+
+  /* update banner */
+  .banner{
+    background:var(--card);
+    border-radius:var(--radius-md);
+    padding:14px 16px;
+    display:flex;align-items:center;gap:12px;
+    box-shadow:0 3px 12px rgba(14,42,78,.05);
+    margin-bottom:16px;
+  }
+  .banner-icon{
+    width:38px;height:38px;border-radius:11px;
+    background:var(--sky);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .banner-text{flex:1;min-width:0;}
+  .banner-text .t1{font-size:13.5px;font-weight:600;color:var(--navy);}
+  .banner-text .t2{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.4;}
+  .banner-cta{
+    background:var(--blue);color:#fff;border:none;
+    font-size:12.5px;font-weight:600;
+    padding:9px 14px;border-radius:9px;
+    white-space:nowrap;
+    font-family:'Sarabun',sans-serif;
+  }
+
+  /* quick actions */
+  .grid2{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:12px;margin-bottom:18px;
+  }
+  .action{
+    background:var(--card);border-radius:var(--radius-md);
+    padding:16px 14px;
+    display:flex;flex-direction:column;align-items:center;gap:9px;
+    text-align:center;
+    box-shadow:0 3px 12px rgba(14,42,78,.05);
+  }
+  .action-icon{
+    width:42px;height:42px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .action .t1{font-size:13px;font-weight:600;color:var(--navy);}
+  .action .t2{font-size:11px;color:var(--ink-soft);}
+
+  /* section heading */
+  .section-head{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:12px;
+  }
+  .section-head h2{font-size:16px;font-weight:600;color:var(--navy);}
+  .section-head a{font-size:12.5px;color:var(--blue);font-weight:600;text-decoration:none;}
+
+  /* risk factors */
+  .factors{
+    background:var(--card);border-radius:var(--radius-lg);
+    padding:6px 18px 10px;
+    box-shadow:0 6px 20px rgba(14,42,78,.06);
+    margin-bottom:18px;
+  }
+  .factor{
+    display:flex;align-items:center;gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid var(--hair);
+  }
+  .factor:last-child{border-bottom:none;}
+  .f-icon{
+    width:36px;height:36px;border-radius:10px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .f-mid{flex:1;min-width:0;}
+  .f-name{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:6px;}
+  .f-bar{height:5px;border-radius:3px;background:var(--hair);overflow:hidden;}
+  .f-bar i{display:block;height:100%;border-radius:3px;}
+  .f-status{font-size:11.5px;font-weight:600;white-space:nowrap;flex-shrink:0;}
+
+  /* trend */
+  .trend{
+    background:var(--card);border-radius:var(--radius-lg);
+    padding:18px;
+    box-shadow:0 6px 20px rgba(14,42,78,.06);
+    margin-bottom:20px;
+  }
+  .trend-select{font-size:12px;color:var(--ink-soft);}
+
+  /* bottom nav */
+  nav{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:430px;
+    background:var(--card);
+    border-top:1px solid var(--hair);
+    display:flex;
+    padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+  }
+  nav a{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+    text-decoration:none;color:var(--ink-soft);font-size:11px;font-weight:500;
+  }
+  nav a.active{color:var(--blue);}
+  nav svg{width:22px;height:22px;}
+
+  /* responsive tweaks */
+  @media (max-width:360px){
+    .mascot-large{width:96px;height:96px;right:6px;bottom:-28px;}
+    .gauge-wrap{width:112px}
+    .score-num{font-size:38px}
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <header>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <path d="M20 3 L34 9 V19 C34 28 28 34.5 20 37 C12 34.5 6 28 6 19 V9 Z" fill="#164C8C"/>
+        <path d="M20 8 L29 12 V19 C29 25.5 25 30 20 32 C15 30 11 25.5 11 19 V12 Z" fill="#2E7FDB"/>
+        <circle cx="20" cy="18" r="4.2" fill="#fff"/>
+        <path d="M14 27 C14 22.5 16.5 20 20 20 C23.5 20 26 22.5 26 27" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Ai<em>Care</em></span>
+    </div>
+    <div class="head-icons" aria-hidden="false">
+      <div class="icon-btn" title="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6B85" stroke-width="1.8" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <div class="dot" aria-hidden="true"></div>
+      </div>
+
+      <!-- มาสคอตเล็กใน header (fallback ถ้าไม่ต้องการให้แสดงให้เปลี่ยนเป็น TK) -->
+      <img src="mascot.png" alt="mascot" class="mascot-small" onerror="this.style.display='none'">
+    </div>
+  </header>
+
+  <main>
+
+    <!-- hero -->
+    <section class="hero" aria-labelledby="riskTitle">
+      <div class="hero-top">
+        <div style="flex:1;">
+          <div class="hero-label">คะแนนความเสี่ยงปัจจุบันของคุณ</div>
+          <div class="score-row" id="riskTitle">
+            <span class="score-num num">68</span>
+            <span class="score-den">/100</span>
+          </div>
+          <div class="pill moderate" aria-hidden="true"><span class="pill-dot"></span>ความเสี่ยงปานกลาง</div>
+          <p class="hero-desc">ดูแลตัวเองอีกนิด เพื่อความคุ้มครองที่เหมาะสมกับคุณมากขึ้น</p>
+          <button class="hero-cta" onclick="alert('ดูรายละเอียด')">ดูรายละเอียด
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+
+        <div class="gauge-wrap" aria-hidden="false">
+          <svg viewBox="0 0 140 100" width="132" height="94" aria-hidden="true" role="img" aria-label="gauge">
+            <path d="M12 88 A58 58 0 0 1 128 88" fill="none" stroke="#E4E9F1" stroke-width="12" stroke-linecap="round"/>
+            <path d="M12 88 A58 58 0 0 1 128 88" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="182.2" stroke-dashoffset="52.8"/>
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#1FAE84"/>
+                <stop offset="55%" stop-color="#F0A93B"/>
+                <stop offset="100%" stop-color="#E85D5D"/>
+              </linearGradient>
+            </defs>
+            <g transform="rotate(148.8 70 88)">
+              <circle cx="121.5" cy="88" r="6" fill="#164C8C" stroke="#fff" stroke-width="2.5"/>
+            </g>
+          </svg>
+          <div class="gauge-num-scale" aria-hidden="true"><span>0</span><span>100</span></div>
+
+          <!-- มาสคอตขนาดใหญ่ซ้อนกับ hero/gauge (อยู่ใต้ SVG วงแหวน) -->
+          <div class="mascot-large" aria-hidden="true">
+            <img src="mascot.png" alt="mascot" onerror="this.style.display='none'">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- banner -->
+    <section class="banner">
+      <div class="banner-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2E7FDB" stroke-width="1.8" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M5 21h14a1 1 0 0 0 1-1V7l-5-5H6a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1z"/><path d="M9 13h6M9 17h6"/></svg>
+      </div>
+      <div class="banner-text">
+        <div class="t1">อัปเดตข้อมูลล่าสุดเมื่อ 2 วันก่อน</div>
+        <div class="t2">อัปเดตข้อมูลชีวิต เพื่อให้เราประเมินความเสี่ยงได้แม่นยำยิ่งขึ้น</div>
+      </div>
+      <button class="banner-cta" onclick="alert('อัปเดตข้อมูล')">อัปเดตตอนนี้</button>
+    </section>
+
+    <!-- quick actions -->
+    <div class="grid2">
+      <div class="action">
+        <div class="action-icon" style="background:var(--mint-bg);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1FAE84" stroke-width="1.8" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+        </div>
+        <div class="t1">อัปเดตข้อมูล</div>
+        <div class="t2">การเปลี่ยนแปลง</div>
+      </div>
+      <div class="action">
+        <div class="action-icon" style="background:var(--sky);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7FDB" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div class="t1">ความคุ้มครอง</div>
+        <div class="t2">กรมธรรม์ของฉัน</div>
+      </div>
+      <div class="action">
+        <div class="action-icon" style="background:var(--violet-bg);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A6FD9" stroke-width="1.8" aria-hidden="true"><path d="M3 20V10M10 20V4M17 20v-7"/></svg>
+        </div>
+        <div class="t1">ข้อมูลเชิงลึก</div>
+        <div class="t2">ด้านสุขภาพ</div>
+      </div>
+      <div class="action">
+        <div class="action-icon" style="background:var(--amber-bg);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C6820B" stroke-width="1.8" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.9 7.3L3 20l1.2-5.1A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        </div>
+        <div class="t1">ปรึกษาโบรกเกอร์</div>
+        <div class="t2">ผู้เชี่ยวชาญ</div>
+      </div>
+    </div>
+
+    <!-- risk factors -->
+    <section>
+      <div class="section-head">
+        <h2>ปัจจัยที่ส่งผลต่อความเสี่ยงของคุณ</h2>
+        <a href="#">ดูทั้งหมด</a>
+      </div>
+      <div class="factors">
+
+        <div class="factor">
+          <div class="f-icon" style="background:var(--coral-bg);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C13F3F" stroke-width="1.9" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.1C.4 8.4 2.3 4.5 6 4c2-.3 3.7.7 6 3 2.3-2.3 4-3.3 6-3 3.7.5 5.6 4.4 4 7.9C19.5 16.4 12 21 12 21z"/></svg>
+          </div>
+          <div class="f-mid">
+            <div class="f-name">สุขภาพ</div>
+            <div class="f-bar"><i style="width:62%;background:#E85D5D;"></i></div>
+          </div>
+          <div class="f-status" style="color:#C6820B;">ปานกลาง</div>
+        </div>
+
+        <div class="factor">
+          <div class="f-icon" style="background:var(--mint-bg);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1FAE84" stroke-width="1.9" aria-hidden="true"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M3 11h18M7 15h.01"/></svg>
+          </div>
+          <div class="f-mid">
+            <div class="f-name">การเงิน</div>
+            <div class="f-bar"><i style="width:24%;background:#1FAE84;"></i></div>
+          </div>
+          <div class="f-status" style="color:#1FAE84;">ต่ำ</div>
+        </div>
+
+        <div class="factor">
+          <div class="f-icon" style="background:var(--sky);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2E7FDB" stroke-width="1.9" aria-hidden="true"><path d="M6.5 6.5h4v4h-4zM13.5 6.5h4v4h-4zM6.5 13.5h4v4h-4zM13.5 13.5h4v4h-4z"/></svg>
+          </div>
+          <div class="f-mid">
+            <div class="f-name">พฤติกรรมการใช้ชีวิต</div>
+            <div class="f-bar"><i style="width:55%;background:#F0A93B;"></i></div>
+          </div>
+          <div class="f-status" style="color:#C6820B;">ปานกลาง</div>
+        </div>
+
+        <div class="factor">
+          <div class="f-icon" style="background:var(--violet-bg);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7A6FD9" stroke-width="1.9" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="18" cy="9" r="2.3"/><path d="M15.5 20c.3-2.4 2-4 4.5-4"/></svg>
+          </div>
+          <div class="f-mid">
+            <div class="f-name">ภาระความรับผิดชอบ</div>
+            <div class="f-bar"><i style="width:48%;background:#F0A93B;"></i></div>
+          </div>
+          <div class="f-status" style="color:#C6820B;">ปานกลาง</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- trend -->
+    <section class="trend">
+      <div class="section-head" style="margin-bottom:6px;">
+        <h2>แนวโน้มความเสี่ยงของคุณ</h2>
+        <span class="trend-select">6 เดือนล่าสุด ⌄</span>
+      </div>
+      <svg viewBox="0 0 340 170" width="100%" height="170" aria-hidden="true">
+        <line x1="0" y1="18" x2="340" y2="18" stroke="#EDF1F7" stroke-width="1"/>
+        <line x1="0" y1="76" x2="340" y2="76" stroke="#EDF1F7" stroke-width="1"/>
+        <line x1="0" y1="134" x2="340" y2="134" stroke="#EDF1F7" stroke-width="1"/>
+        <text x="0" y="22" font-size="10" fill="#8B99B2" font-family="Sarabun">100</text>
+        <text x="0" y="80" font-size="10" fill="#8B99B2" font-family="Sarabun">50</text>
+        <text x="0" y="138" font-size="10" fill="#8B99B2" font-family="Sarabun">0</text>
+
+        <polyline points="35,42 90,48 145,54 200,64 255,61 310,53"
+          fill="none" stroke="#2E7FDB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <g font-family="Sarabun" font-size="10" fill="#8B99B2">
+          <text x="26" y="158" text-anchor="middle">ม.ค.</text>
+          <text x="90" y="158" text-anchor="middle">ก.พ.</text>
+          <text x="145" y="158" text-anchor="middle">มี.ค.</text>
+          <text x="200" y="158" text-anchor="middle">เม.ย.</text>
+          <text x="255" y="158" text-anchor="middle">พ.ค.</text>
+          <text x="310" y="158" text-anchor="middle">มิ.ย.</text>
+        </g>
+
+        <g font-family="Prompt" font-size="10.5" font-weight="600" fill="#164C8C">
+          <text x="35" y="35" text-anchor="middle">72</text>
+          <text x="90" y="41" text-anchor="middle">70</text>
+          <text x="145" y="47" text-anchor="middle">68</text>
+          <text x="200" y="57" text-anchor="middle">65</text>
+          <text x="255" y="54" text-anchor="middle">66</text>
+        </g>
+        <circle cx="310" cy="53" r="4.5" fill="#164C8C"/>
+        <rect x="292" y="28" width="36" height="18" rx="9" fill="#164C8C"/>
+        <text x="310" y="40.5" text-anchor="middle" font-family="Prompt" font-size="11" font-weight="600" fill="#fff">68</text>
+      </svg>
+    </section>
+
+  </main>
+
+  <nav aria-label="main navigation">
+    <a class="active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+      หน้าหลัก
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/></svg>
+      ความคุ้มครอง
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 20V10M10 20V4M17 20v-7"/></svg>
+      ข้อมูลของฉัน
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+      โปรไฟล์
+    </a>
+  </nav>
+
+</div>
+</body>
+</html>
