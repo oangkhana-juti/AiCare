@@ -38,6 +38,9 @@
     display:flex;
     justify-content:center;
   }
+  /* When splash is active we prevent scrolling */
+  body.splash-active { overflow: hidden; touch-action: none; }
+
   .phone{
     width:100%;
     max-width:430px;
@@ -58,7 +61,6 @@
   }
   .brand{display:flex;align-items:center;gap:3px;}
 
-  /* UPDATED: brand-mark CSS for image logo (transparent background, size adjusted) */
   .brand-mark{
     width:40px;
     height:40px;
@@ -265,14 +267,80 @@
     .gauge-wrap{width:112px}
     .score-num{font-size:38px}
   }
+
+  /* ---------------------------
+     Splash / Intro video styles
+     --------------------------- */
+  .splash-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* REMOVED dark background: make fully transparent so only the video is visible */
+    background: transparent;
+    z-index:9999;
+    transition:opacity .5s ease;
+    opacity:1;
+    pointer-events:auto;
+  }
+/* optional: align splash to top so it visually overlaps where .phone sits */
+.splash-overlay{
+  align-items:flex-start;     /* place video from top */
+  padding-top:-1px;           /* กำหนดระยะห่างจากบนหน้าจอ (ปรับค่าได้) */
+  background: transparent;
+}
+/* Replace the existing .splash-video rule with this */
+.splash-video{
+  width:100%;
+  max-width:430px;      /* match the .phone max-width */
+  height:100vh;         /* full viewport height (matches .phone min-height:100vh) */
+  max-height:100vh;
+  object-fit:cover;     /* crop/scale to fill the frame nicely */
+  border-radius:12px;   /* keep the rounded corners */
+  box-shadow:none;
+  background:transparent;
+  display:block;
+}
+
+  .splash-skip{
+    position:absolute;
+    top:18px;
+    right:18px;
+    background:rgba(255,255,255,0.95);
+    color:#123;
+    border:none;
+    padding:8px 12px;
+    border-radius:999px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,0.12);
+  }
+  .splash-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
 </style>
 </head>
-<body>
-<div class="phone">
+<body class="splash-active">
+<!-- Splash overlay with MP4 intro -->
+<!-- Place animation.mp4 (3s) in same folder, filename: animation.mp4 -->
+<div id="splash" class="splash-overlay" role="dialog" aria-label="Intro animation">
+  <button id="splashSkip" class="splash-skip" aria-label="ข้ามการแสดง">ข้าม</button>
+  <video id="splashVideo"
+         class="splash-video"
+         src="animation.mp4"
+         autoplay
+         muted
+         playsinline
+         preload="auto"
+         aria-hidden="false">
+    <!-- Fallback message -->
+    <p class="splash-sr-only">กำลังเล่นแอนิเมชันหน้าแรก — ถ้าคุณต้องการข้าม ให้กดปุ่มข้าม</p>
+  </video>
+</div>
+
+<div class="phone" id="app" aria-hidden="true">
 
   <header>
     <div class="brand">
-      <!-- REPLACED: SVG replaced with image logo (logo.png). Put a transparent PNG/SVG named logo.png in same folder. -->
       <span class="brand-mark" aria-hidden="false">
         <img src="logo.png" alt="AiCare logo" onerror="this.style.display='none'">
       </span>
@@ -285,13 +353,13 @@
         <div class="dot" aria-hidden="true"></div>
       </div>
 
-      <!-- มาสคอตเล็กใน header (fallback ถ้าไม่ต้องการให้แสดงให้เปลี่ยนเป็น TK) -->
+      <!-- มาสคอตเล็กใน header -->
       <img src="mascot.png" alt="mascot" class="mascot-small" onerror="this.style.display='none'">
     </div>
   </header>
 
   <main>
-
+    <!-- (ส่วนเนื้อหาเหมือนเดิม ไม่เปลี่ยน) -->
     <!-- hero -->
     <section class="hero" aria-labelledby="riskTitle">
       <div class="hero-top">
@@ -326,7 +394,6 @@
           </svg>
           <div class="gauge-num-scale" aria-hidden="true"><span>0</span><span>100</span></div>
 
-          <!-- มาสคอตขนาดใหญ่ซ้อนกับ hero/gauge (อยู่ใต้ SVG วงแหวน) -->
           <div class="mascot-large" aria-hidden="true">
             <img src="mascot.png" alt="mascot" onerror="this.style.display='none'">
           </div>
@@ -494,5 +561,73 @@
   </nav>
 
 </div>
+
+<script>
+  // Splash behavior:
+  // - Plays animation.mp4 (put file in same folder with name "animation.mp4")
+  // - Auto-hide after video ends OR after 3000ms (3s)
+  // - Skip button available
+  (function(){
+    const splash = document.getElementById('splash');
+    const video = document.getElementById('splashVideo');
+    const skipBtn = document.getElementById('splashSkip');
+    const app = document.getElementById('app');
+
+    // Fallback timeout (in ms) — changed to 3000ms for 3 seconds
+    const FALLBACK_MS = 3000;
+    let fallbackTimer = null;
+    let removed = false;
+
+    function removeSplash(){
+      if(removed) return;
+      removed = true;
+      // fade out
+      splash.classList.add('hidden');
+      // allow animation to finish fade (.5s) then remove overlay
+      setTimeout(()=>{ 
+        if(splash && splash.parentNode) splash.parentNode.removeChild(splash);
+        // enable scrolling / interaction
+        document.body.classList.remove('splash-active');
+        // reveal app to assistive tech
+        app.removeAttribute('aria-hidden');
+      }, 500);
+    }
+
+    // If video ends normally -> remove overlay
+    video.addEventListener('ended', removeSplash, {once:true});
+
+    // If user clicks skip
+    skipBtn.addEventListener('click', ()=>{
+      try{ video.pause(); }catch(e){}
+      removeSplash();
+    });
+
+    // Start fallback timer in case ended event doesn't fire
+    fallbackTimer = setTimeout(removeSplash, FALLBACK_MS);
+
+    // Try to play (some browsers require muted to autoplay; we set muted attribute)
+    const p = video.play();
+    if (p && typeof p.then === 'function') {
+      p.then(()=> {
+        // playing; ensure fallback is still in place
+      }).catch((err)=>{
+        // Autoplay failed — still keep splash for fallback duration but show skip button
+        console.warn('Autoplay failed:', err);
+      });
+    }
+
+    // Accessibility: allow Escape key to skip
+    function onKey(e){
+      if(e.key === 'Escape' || e.key === 'Esc') removeSplash();
+    }
+    document.addEventListener('keydown', onKey);
+
+    // Clean up listeners when splash removed
+    setTimeout(()=>{
+      document.removeEventListener('keydown', onKey);
+      if(fallbackTimer) clearTimeout(fallbackTimer);
+    }, FALLBACK_MS + 800);
+  })();
+</script>
 </body>
 </html>
