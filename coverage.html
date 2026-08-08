@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>AiCare — ความคุ้มครอง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0E2A4E;
+    --blue-deep:#164C8C;
+    --blue:#2E7FDB;
+    --sky:#E8F2FC;
+    --mint:#1FAE84;
+    --mint-deep:#0E7C5A;
+    --mint-bg:#E4F7F1;
+    --amber:#F0A93B;
+    --amber-bg:#FDF1DE;
+    --coral:#E85D5D;
+    --coral-bg:#FCEAEA;
+    --violet:#7A6FD9;
+    --violet-bg:#EFEDFB;
+    --bg:#F3F6FB;
+    --card:#FFFFFF;
+    --ink:#16233D;
+    --ink-soft:#5B6B85;
+    --hair:#E4E9F1;
+    --radius-lg:20px;
+    --radius-md:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Sarabun',sans-serif;
+    background:#DCE4EF;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    justify-content:center;
+  }
+  .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    padding-bottom:88px;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.num{font-family:'Prompt',sans-serif;}
+
+  /* header (page header w/ back button, replaces the home brand header) */
+  header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:20px 20px 14px;
+  }
+  .back-btn{
+    width:38px;height:38px;border-radius:50%;
+    background:var(--card);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 1px 2px rgba(14,42,78,.06);
+    text-decoration:none;
+    color:var(--navy);
+    flex-shrink:0;
+  }
+  .page-title{
+    font-family:'Prompt',sans-serif;
+    font-weight:600;
+    font-size:19px;
+    color:var(--navy);
+  }
+  .page-sub{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:1px;
+  }
+
+  main{padding:0 20px;}
+
+  .section-head{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:12px;
+  }
+
+  .wrap {
+    width:100%;
+    max-width:390px;
+    margin:0 auto;
+    padding:0;
+  }
+  .card-section{
+    background:var(--card);
+    border-radius:16px;
+    box-shadow:0 10px 30px -18px rgba(14,42,78,0.22);
+    padding:14px;
+    margin-bottom:14px;
+  }
+  .section-title{
+    font-family:'Prompt',sans-serif;
+    font-size:15px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .section-link{
+    font-size:12.5px;color:var(--blue);font-weight:700;display:flex;align-items:center;gap:4px;
+    text-decoration:none;
+  }
+
+  .cat-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px;}
+  .cat{text-align:center;font-family:'Sarabun',sans-serif;}
+  .cat-ic{
+    width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; margin:0 auto 8px;
+    box-shadow:0 4px 10px rgba(14,42,78,0.04);
+  }
+  .cat-name{font-size:11px; color:var(--ink-soft); font-weight:600; margin-bottom:4px;}
+
+  .gap-item{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--hair);
+  }
+  .gap-item:last-child{border-bottom:none; padding-bottom:0;}
+  .gap-ic{
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+    box-shadow:0 4px 10px rgba(14,42,78,0.04);
+  }
+  .gap-main{flex:1; min-width:0;}
+  .gap-title-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .gap-title{font-size:13.25px; font-weight:700; color:var(--navy);}
+  .gap-tag{font-size:10px; font-weight:700; padding:4px 8px; border-radius:10px;}
+  .gap-desc{font-size:12px; color:var(--ink-soft); margin-top:4px; line-height:1.5;}
+  .gap-value{text-align:right; flex-shrink:0;}
+  .gap-value .lbl{font-size:11px; color:var(--ink-soft);}
+  .gap-value .amt{font-size:13.5px; font-weight:800; color:var(--amber);}
+
+  .policy-item{display:flex; align-items:center; gap:12px; padding:8px 0;}
+  .policy-ic{
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    background:var(--mint-bg); color:var(--mint);
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  .policy-main{flex:1;}
+  .policy-title{font-size:13.25px; font-weight:700; color:var(--navy);}
+  .policy-desc{font-size:12px; color:var(--ink-soft); margin-top:4px; line-height:1.4;}
+  .policy-right{text-align:right;}
+  .policy-right .amt{font-size:13px; font-weight:800; color:var(--mint);}
+  .policy-right .sub{font-size:11px; color:var(--ink-soft); margin-top:4px;}
+
+  nav{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:430px;
+    background:var(--card);
+    border-top:1px solid var(--hair);
+    display:flex;
+    padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+  }
+  nav a{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+    text-decoration:none;color:var(--ink-soft);font-size:11px;font-weight:500;
+  }
+  nav a.active{color:var(--blue);}
+  nav svg{width:22px;height:22px;}
+
+  @media (max-width:360px){
+    .cat-grid{gap:6px;}
+  }
+
+  .card-section, .card-section * { font-family: 'Sarabun', sans-serif !important; color:var(--ink) !important; line-height:1.4 !important; }
+  .card-section .section-title { font-family:'Prompt', sans-serif !important; font-weight:700 !important; }
+</style>
+</head>
+<body>
+
+<div class="phone" id="app">
+
+  <header>
+    <a class="back-btn" href="index.html" aria-label="กลับหน้าหลัก">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16233D" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    </a>
+    <div>
+      <div class="page-title">ความคุ้มครอง</div>
+      <div class="page-sub">ภาพรวมความคุ้มครองทั้งหมดของคุณ</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <!-- Categories -->
+      <div class="card-section" aria-labelledby="coverageTitle">
+        <div class="section-head" style="margin-bottom:12px;">
+          <div class="section-title" id="coverageTitle">ความคุ้มครองแยกตามหมวด</div>
+          <a class="section-link" href="#">ดูรายละเอียด &#8250;</a>
+        </div>
+        <div class="cat-grid" role="list" aria-label="หมวดความคุ้มครอง">
+          <div class="cat" role="listitem">
+            <div class="cat-ic" style="background:#E4F7F1; color:var(--mint);">❤️</div>
+            <div class="cat-name">ชีวิต</div>
+          </div>
+          <div class="cat" role="listitem">
+            <div class="cat-ic" style="background:#E8F2FC; color:var(--blue);">➕</div>
+            <div class="cat-name">สุขภาพ</div>
+          </div>
+          <div class="cat" role="listitem">
+            <div class="cat-ic" style="background:#FFF6EA; color:var(--amber);">🚗</div>
+            <div class="cat-name">อุบัติเหตุ</div>
+          </div>
+          <div class="cat" role="listitem">
+            <div class="cat-ic" style="background:#F2F0FF; color:var(--violet);">💰</div>
+            <div class="cat-name">รายได้</div>
+          </div>
+          <div class="cat" role="listitem">
+            <div class="cat-ic" style="background:#FFF1F4; color:#D9527A;">🎗️</div>
+            <div class="cat-name">โรคร้ายแรง</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gaps -->
+      <div class="card-section" aria-labelledby="gapsTitle">
+        <div class="section-head" style="margin-bottom:6px;">
+          <div class="section-title" id="gapsTitle">ช่องว่างความคุ้มครองที่ควรพิจารณา</div>
+        </div>
+        <div class="gap-item" role="article" aria-label="ช่องว่างความคุ้มครองรายได้">
+          <div class="gap-ic" style="background:#F2F0FF;">💰</div>
+          <div class="gap-main">
+            <div class="gap-title-row">
+              <span class="gap-title">ความคุ้มครองรายได้</span>
+              <span class="gap-tag" style="background:#FFF1F4; color:#D9527A;">ช่องว่างสูง</span>
+            </div>
+            <div class="gap-desc">หากเกิดเหตุไม่คาดคิด รายได้ของครอบครัวอาจไม่เพียงพอ</div>
+          </div>
+          <div class="gap-value" aria-hidden="true">
+            <div class="lbl">ช่องว่าง</div>
+            <div class="amt">25,000 บาท/เดือน</div>
+          </div>
+        </div>
+
+        <div class="gap-item" role="article" aria-label="ช่องว่างโรคร้ายแรง">
+          <div class="gap-ic" style="background:#FFF9EC;">➕</div>
+          <div class="gap-main">
+            <div class="gap-title-row">
+              <span class="gap-title">โรคร้ายแรง</span>
+              <span class="gap-tag" style="background:#FFF9EC; color:var(--amber);">ช่องว่างปานกลาง</span>
+            </div>
+            <div class="gap-desc">ความคุ้มครองปัจจุบันอาจไม่ครอบคลุมค่ารักษาที่เพิ่มขึ้น</div>
+          </div>
+          <div class="gap-value" aria-hidden="true">
+            <div class="lbl">ช่องว่าง</div>
+            <div class="amt">500,000 บาท</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Policies -->
+      <div class="card-section" aria-labelledby="policiesTitle">
+        <div class="section-head" style="margin-bottom:10px;">
+          <div class="section-title" id="policiesTitle">กรมธรรม์ของคุณ</div>
+          <a class="section-link" href="#">ดูทั้งหมด &#8250;</a>
+        </div>
+        <div class="policy-item" role="listitem" aria-label="ประกันชีวิตแบบตลอดชีพ">
+          <div class="policy-ic" aria-hidden="true">🛡️</div>
+          <div class="policy-main">
+            <div class="policy-title">ประกันชีวิตแบบตลอดชีพ</div>
+            <div class="policy-desc">กรุงศรี ไลฟ์ แอสชัวรันส์<br>กรมธรรม์เลขที่ 123-4567890</div>
+          </div>
+          <div class="policy-right" aria-hidden="true">
+            <div class="amt">คุ้มครอง 2,000,000 บาท</div>
+            <div class="sub">เบี้ยประกัน 18,000 บาท/ปี<br>สถานะ: มีผลบังคับ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <nav aria-label="main navigation">
+    <a href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+      หน้าหลัก
+    </a>
+    <a class="active" href="coverage.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/></svg>
+      ความคุ้มครอง
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 20V10M10 20V4M17 20v-7"/></svg>
+      ข้อมูลของฉัน
+    </a>
+    <a href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+      โปรไฟล์
+    </a>
+  </nav>
+
+</div>
+
+</body>
+</html>
