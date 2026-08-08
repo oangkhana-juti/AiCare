@@ -14,6 +14,7 @@
     --blue:#2E7FDB;
     --sky:#E8F2FC;
     --mint:#1FAE84;
+    --mint-deep:#0E7C5A;
     --mint-bg:#E4F7F1;
     --amber:#F0A93B;
     --amber-bg:#FDF1DE;
@@ -38,7 +39,6 @@
     display:flex;
     justify-content:center;
   }
-  /* When splash is active we prevent scrolling */
   body.splash-active { overflow: hidden; touch-action: none; }
 
   .phone{
@@ -52,7 +52,6 @@
   }
   h1,h2,h3,.num{font-family:'Prompt',sans-serif;}
 
-  /* header */
   header{
     display:flex;
     align-items:center;
@@ -101,7 +100,6 @@
     color:#fff;font-family:'Prompt',sans-serif;font-weight:600;font-size:14px;
   }
 
-  /* Mascot small (header) */
   .mascot-small{
     width:38px;height:38px;border-radius:50%;overflow:hidden;border:2px solid #fff;box-shadow:0 4px 12px rgba(7,20,50,0.1);
     display:inline-block;object-fit:cover;
@@ -109,15 +107,14 @@
 
   main{padding:0 20px;}
 
-  /* hero card */
   .hero{
     background:var(--card);
     border-radius:var(--radius-lg);
     padding:22px 20px 20px;
     box-shadow:0 6px 20px rgba(14,42,78,.07);
     margin-bottom:16px;
-    position:relative; /* positioning context for mascot-large */
-    overflow:visible;  /* allow mascot to overflow outside the card */
+    position:relative;
+    overflow:visible;
   }
   .hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
   .hero-label{font-size:13px;color:var(--ink-soft);font-weight:500;margin-bottom:2px;}
@@ -142,26 +139,10 @@
     border:none;
   }
 
-  /* gauge area: ensure svg sits above mascot */
-  .gauge-wrap{width:132px;flex-shrink:0;text-align:center;position:relative; z-index:3;}
-  .gauge-wrap svg{ position:relative; z-index:4; } /* SVG (วงแหวน) อยู่ด้านบน */
-  .gauge-num-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-top:2px;padding:0 4px;}
+  .gauge-wrap{width:150px;flex-shrink:0;text-align:center;position:relative; z-index:3;}
+  .gauge-wrap #gauge { width:150px; margin:0 auto; display:block; }
+  .gauge-num-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-top:6px;padding:0 6px;}
 
-  /* Large mascot overlapping hero/gauge (below the SVG) */
-  .mascot-large{
-    position:absolute;
-    right:10px;
-    bottom:-36px;    /* เลื่อนลงเพื่อไม่ทับวงแหวน (ปรับค่าได้ตามต้องการ) */
-    width:120px;
-    height:120px;
-    pointer-events:none;
-    transform:translateZ(0);
-    filter:drop-shadow(0 10px 30px rgba(30,55,100,0.12));
-    z-index:1;       /* ให้มาสคอตอยู่ใต้ SVG วงแหวน */
-  }
-  .mascot-large img{width:100%;height:100%;object-fit:contain;display:block;}
-
-  /* update banner */
   .banner{
     background:var(--card);
     border-radius:var(--radius-md);
@@ -186,7 +167,6 @@
     font-family:'Sarabun',sans-serif;
   }
 
-  /* quick actions */
   .grid2{
     display:grid;grid-template-columns:1fr 1fr;
     gap:12px;margin-bottom:18px;
@@ -205,7 +185,6 @@
   .action .t1{font-size:13px;font-weight:600;color:var(--navy);}
   .action .t2{font-size:11px;color:var(--ink-soft);}
 
-  /* section heading */
   .section-head{
     display:flex;justify-content:space-between;align-items:center;
     margin-bottom:12px;
@@ -213,30 +192,72 @@
   .section-head h2{font-size:16px;font-weight:600;color:var(--navy);}
   .section-head a{font-size:12.5px;color:var(--blue);font-weight:600;text-decoration:none;}
 
-  /* risk factors */
-  .factors{
-    background:var(--card);border-radius:var(--radius-lg);
-    padding:6px 18px 10px;
-    box-shadow:0 6px 20px rgba(14,42,78,.06);
-    margin-bottom:18px;
+  .wrap {
+    width:100%;
+    max-width:390px;
+    margin:0 auto;
+    padding:0 10px;
   }
-  .factor{
-    display:flex;align-items:center;gap:12px;
-    padding:13px 0;
+  .card-section{
+    background:var(--card);
+    border-radius:16px;
+    box-shadow:0 10px 30px -18px rgba(14,42,78,0.22);
+    padding:14px;
+    margin-bottom:14px;
+  }
+  .section-title{
+    font-family:'Prompt',sans-serif;
+    font-size:15px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .section-link{
+    font-size:12.5px;color:var(--blue);font-weight:700;display:flex;align-items:center;gap:4px;
+  }
+
+  .cat-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px;}
+  .cat{text-align:center;font-family:'Sarabun',sans-serif;}
+  .cat-ic{
+    width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; margin:0 auto 8px;
+    box-shadow:0 4px 10px rgba(14,42,78,0.04);
+  }
+  .cat-name{font-size:11px; color:var(--ink-soft); font-weight:600; margin-bottom:4px;}
+
+  .gap-item{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 0;
     border-bottom:1px solid var(--hair);
   }
-  .factor:last-child{border-bottom:none;}
-  .f-icon{
-    width:36px;height:36px;border-radius:10px;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
+  .gap-item:last-child{border-bottom:none; padding-bottom:0;}
+  .gap-ic{
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+    box-shadow:0 4px 10px rgba(14,42,78,0.04);
   }
-  .f-mid{flex:1;min-width:0;}
-  .f-name{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:6px;}
-  .f-bar{height:5px;border-radius:3px;background:var(--hair);overflow:hidden;}
-  .f-bar i{display:block;height:100%;border-radius:3px;}
-  .f-status{font-size:11.5px;font-weight:600;white-space:nowrap;flex-shrink:0;}
+  .gap-main{flex:1; min-width:0;}
+  .gap-title-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .gap-title{font-size:13.25px; font-weight:700; color:var(--navy);}
+  .gap-tag{font-size:10px; font-weight:700; padding:4px 8px; border-radius:10px;}
+  .gap-desc{font-size:12px; color:var(--ink-soft); margin-top:4px; line-height:1.5;}
+  .gap-value{text-align:right; flex-shrink:0;}
+  .gap-value .lbl{font-size:11px; color:var(--ink-soft);}
+  .gap-value .amt{font-size:13.5px; font-weight:800; color:var(--amber);}
 
-  /* trend */
+  .policy-item{display:flex; align-items:center; gap:12px; padding:8px 0;}
+  .policy-ic{
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    background:var(--mint-bg); color:var(--mint);
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  .policy-main{flex:1;}
+  .policy-title{font-size:13.25px; font-weight:700; color:var(--navy);}
+  .policy-desc{font-size:12px; color:var(--ink-soft); margin-top:4px; line-height:1.4;}
+  .policy-right{text-align:right;}
+  .policy-right .amt{font-size:13px; font-weight:800; color:var(--mint);}
+  .policy-right .sub{font-size:11px; color:var(--ink-soft); margin-top:4px;}
+
   .trend{
     background:var(--card);border-radius:var(--radius-lg);
     padding:18px;
@@ -245,7 +266,6 @@
   }
   .trend-select{font-size:12px;color:var(--ink-soft);}
 
-  /* bottom nav */
   nav{
     position:fixed;bottom:0;left:50%;transform:translateX(-50%);
     width:100%;max-width:430px;
@@ -261,69 +281,56 @@
   nav a.active{color:var(--blue);}
   nav svg{width:22px;height:22px;}
 
-  /* responsive tweaks */
   @media (max-width:360px){
-    .mascot-large{width:96px;height:96px;right:6px;bottom:-28px;}
-    .gauge-wrap{width:112px}
+    .gauge-wrap{width:130px}
     .score-num{font-size:38px}
+    .cat-grid{gap:6px;}
   }
 
-  /* ---------------------------
-     Splash / Intro video styles
-     --------------------------- */
   .splash-overlay{
     position:fixed;
     inset:0;
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     justify-content:center;
-    /* REMOVED dark background: make fully transparent so only the video is visible */
+    padding-top:0;
     background: transparent;
     z-index:9999;
-    transition:opacity .5s ease;
+    transition:opacity .6s ease, visibility .6s ease;
     opacity:1;
+    visibility:visible;
     pointer-events:auto;
   }
-/* optional: align splash to top so it visually overlaps where .phone sits */
-.splash-overlay{
-  align-items:flex-start;     /* place video from top */
-  padding-top:-1px;           /* กำหนดระยะห่างจากบนหน้าจอ (ปรับค่าได้) */
-  background: transparent;
-}
-/* Replace the existing .splash-video rule with this */
-.splash-video{
-  width:100%;
-  max-width:430px;      /* match the .phone max-width */
-  height:100vh;         /* full viewport height (matches .phone min-height:100vh) */
-  max-height:100vh;
-  object-fit:cover;     /* crop/scale to fill the frame nicely */
-  border-radius:12px;   /* keep the rounded corners */
-  box-shadow:none;
-  background:transparent;
-  display:block;
-}
 
-  .splash-skip{
-    position:absolute;
-    top:18px;
-    right:18px;
-    background:rgba(255,255,255,0.95);
-    color:#123;
-    border:none;
-    padding:8px 12px;
-    border-radius:999px;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 6px 20px rgba(0,0,0,0.12);
+  .splash-overlay.hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
   }
+
+  .splash-video{
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    max-height:100vh;
+    object-fit:cover;
+    border-radius:12px;
+    box-shadow:none;
+    background:transparent;
+    display:block;
+    transition:opacity .6s ease;
+  }
+
   .splash-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+
+  .card-section, .card-section * { font-family: 'Sarabun', sans-serif !important; color:var(--ink) !important; line-height:1.4 !important; }
+  .card-section .section-title { font-family:'Prompt', sans-serif !important; font-weight:700 !important; }
+
+  .gauge-wrap svg { display:block; margin:0 auto; }
 </style>
 </head>
 <body class="splash-active">
-<!-- Splash overlay with MP4 intro -->
-<!-- Place animation.mp4 (3s) in same folder, filename: animation.mp4 -->
 <div id="splash" class="splash-overlay" role="dialog" aria-label="Intro animation">
-  <button id="splashSkip" class="splash-skip" aria-label="ข้ามการแสดง">ข้าม</button>
   <video id="splashVideo"
          class="splash-video"
          src="animation.mp4"
@@ -332,8 +339,7 @@
          playsinline
          preload="auto"
          aria-hidden="false">
-    <!-- Fallback message -->
-    <p class="splash-sr-only">กำลังเล่นแอนิเมชันหน้าแรก — ถ้าคุณต้องการข้าม ให้กดปุ่มข้าม</p>
+    <p class="splash-sr-only">กำลังเล่นแอนิเมชันหน้าแรก</p>
   </video>
 </div>
 
@@ -353,20 +359,17 @@
         <div class="dot" aria-hidden="true"></div>
       </div>
 
-      <!-- มาสคอตเล็กใน header -->
       <img src="mascot.png" alt="mascot" class="mascot-small" onerror="this.style.display='none'">
     </div>
   </header>
 
   <main>
-    <!-- (ส่วนเนื้อหาเหมือนเดิม ไม่เปลี่ยน) -->
-    <!-- hero -->
     <section class="hero" aria-labelledby="riskTitle">
       <div class="hero-top">
         <div style="flex:1;">
           <div class="hero-label">คะแนนความเสี่ยงปัจจุบันของคุณ</div>
           <div class="score-row" id="riskTitle">
-            <span class="score-num num">68</span>
+            <span class="score-num num">78</span>
             <span class="score-den">/100</span>
           </div>
           <div class="pill moderate" aria-hidden="true"><span class="pill-dot"></span>ความเสี่ยงปานกลาง</div>
@@ -377,31 +380,12 @@
         </div>
 
         <div class="gauge-wrap" aria-hidden="false">
-          <svg viewBox="0 0 140 100" width="132" height="94" aria-hidden="true" role="img" aria-label="gauge">
-            <path d="M12 88 A58 58 0 0 1 128 88" fill="none" stroke="#E4E9F1" stroke-width="12" stroke-linecap="round"/>
-            <path d="M12 88 A58 58 0 0 1 128 88" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round"
-              stroke-dasharray="182.2" stroke-dashoffset="52.8"/>
-            <defs>
-              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#1FAE84"/>
-                <stop offset="55%" stop-color="#F0A93B"/>
-                <stop offset="100%" stop-color="#E85D5D"/>
-              </linearGradient>
-            </defs>
-            <g transform="rotate(148.8 70 88)">
-              <circle cx="121.5" cy="88" r="6" fill="#164C8C" stroke="#fff" stroke-width="2.5"/>
-            </g>
-          </svg>
-          <div class="gauge-num-scale" aria-hidden="true"><span>0</span><span>100</span></div>
-
-          <div class="mascot-large" aria-hidden="true">
-            <img src="mascot.png" alt="mascot" onerror="this.style.display='none'">
-          </div>
+          <div id="gauge" aria-hidden="false"></div>
+          <div class="gauge-num-scale" aria-hidden="true"><span>0%</span><span>100%</span></div>
         </div>
       </div>
     </section>
 
-    <!-- banner -->
     <section class="banner">
       <div class="banner-icon">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2E7FDB" stroke-width="1.8" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M5 21h14a1 1 0 0 0 1-1V7l-5-5H6a1 1 0 0 0-1 1v17a1 1 0 0 0 1 1z"/><path d="M9 13h6M9 17h6"/></svg>
@@ -413,7 +397,6 @@
       <button class="banner-cta" onclick="alert('อัปเดตข้อมูล')">อัปเดตตอนนี้</button>
     </section>
 
-    <!-- quick actions -->
     <div class="grid2">
       <div class="action">
         <div class="action-icon" style="background:var(--mint-bg);">
@@ -445,62 +428,6 @@
       </div>
     </div>
 
-    <!-- risk factors -->
-    <section>
-      <div class="section-head">
-        <h2>ปัจจัยที่ส่งผลต่อความเสี่ยงของคุณ</h2>
-        <a href="#">ดูทั้งหมด</a>
-      </div>
-      <div class="factors">
-
-        <div class="factor">
-          <div class="f-icon" style="background:var(--coral-bg);">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C13F3F" stroke-width="1.9" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.1C.4 8.4 2.3 4.5 6 4c2-.3 3.7.7 6 3 2.3-2.3 4-3.3 6-3 3.7.5 5.6 4.4 4 7.9C19.5 16.4 12 21 12 21z"/></svg>
-          </div>
-          <div class="f-mid">
-            <div class="f-name">สุขภาพ</div>
-            <div class="f-bar"><i style="width:62%;background:#E85D5D;"></i></div>
-          </div>
-          <div class="f-status" style="color:#C6820B;">ปานกลาง</div>
-        </div>
-
-        <div class="factor">
-          <div class="f-icon" style="background:var(--mint-bg);">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1FAE84" stroke-width="1.9" aria-hidden="true"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M3 11h18M7 15h.01"/></svg>
-          </div>
-          <div class="f-mid">
-            <div class="f-name">การเงิน</div>
-            <div class="f-bar"><i style="width:24%;background:#1FAE84;"></i></div>
-          </div>
-          <div class="f-status" style="color:#1FAE84;">ต่ำ</div>
-        </div>
-
-        <div class="factor">
-          <div class="f-icon" style="background:var(--sky);">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2E7FDB" stroke-width="1.9" aria-hidden="true"><path d="M6.5 6.5h4v4h-4zM13.5 6.5h4v4h-4zM6.5 13.5h4v4h-4zM13.5 13.5h4v4h-4z"/></svg>
-          </div>
-          <div class="f-mid">
-            <div class="f-name">พฤติกรรมการใช้ชีวิต</div>
-            <div class="f-bar"><i style="width:55%;background:#F0A93B;"></i></div>
-          </div>
-          <div class="f-status" style="color:#C6820B;">ปานกลาง</div>
-        </div>
-
-        <div class="factor">
-          <div class="f-icon" style="background:var(--violet-bg);">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7A6FD9" stroke-width="1.9" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="18" cy="9" r="2.3"/><path d="M15.5 20c.3-2.4 2-4 4.5-4"/></svg>
-          </div>
-          <div class="f-mid">
-            <div class="f-name">ภาระความรับผิดชอบ</div>
-            <div class="f-bar"><i style="width:48%;background:#F0A93B;"></i></div>
-          </div>
-          <div class="f-status" style="color:#C6820B;">ปานกลาง</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- trend -->
     <section class="trend">
       <div class="section-head" style="margin-bottom:6px;">
         <h2>แนวโน้มความเสี่ยงของคุณ</h2>
@@ -542,11 +469,11 @@
   </main>
 
   <nav aria-label="main navigation">
-    <a class="active" href="#">
+    <a class="active" href="index.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
       หน้าหลัก
     </a>
-    <a href="#">
+    <a href="coverage.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/></svg>
       ความคุ้มครอง
     </a>
@@ -563,17 +490,11 @@
 </div>
 
 <script>
-  // Splash behavior:
-  // - Plays animation.mp4 (put file in same folder with name "animation.mp4")
-  // - Auto-hide after video ends OR after 3000ms (3s)
-  // - Skip button available
   (function(){
     const splash = document.getElementById('splash');
     const video = document.getElementById('splashVideo');
-    const skipBtn = document.getElementById('splashSkip');
     const app = document.getElementById('app');
 
-    // Fallback timeout (in ms) — changed to 3000ms for 3 seconds
     const FALLBACK_MS = 3000;
     let fallbackTimer = null;
     let removed = false;
@@ -581,52 +502,117 @@
     function removeSplash(){
       if(removed) return;
       removed = true;
-      // fade out
       splash.classList.add('hidden');
-      // allow animation to finish fade (.5s) then remove overlay
       setTimeout(()=>{ 
         if(splash && splash.parentNode) splash.parentNode.removeChild(splash);
-        // enable scrolling / interaction
         document.body.classList.remove('splash-active');
-        // reveal app to assistive tech
         app.removeAttribute('aria-hidden');
-      }, 500);
+      }, 700);
     }
 
-    // If video ends normally -> remove overlay
-    video.addEventListener('ended', removeSplash, {once:true});
-
-    // If user clicks skip
-    skipBtn.addEventListener('click', ()=>{
-      try{ video.pause(); }catch(e){}
-      removeSplash();
-    });
-
-    // Start fallback timer in case ended event doesn't fire
+    if (video) video.addEventListener('ended', removeSplash, {once:true});
     fallbackTimer = setTimeout(removeSplash, FALLBACK_MS);
-
-    // Try to play (some browsers require muted to autoplay; we set muted attribute)
-    const p = video.play();
-    if (p && typeof p.then === 'function') {
-      p.then(()=> {
-        // playing; ensure fallback is still in place
-      }).catch((err)=>{
-        // Autoplay failed — still keep splash for fallback duration but show skip button
-        console.warn('Autoplay failed:', err);
-      });
+    if (video) {
+      const p = video.play();
+      if (p && typeof p.then === 'function') {
+        p.catch(err => console.warn('Autoplay failed:', err));
+      }
     }
 
-    // Accessibility: allow Escape key to skip
-    function onKey(e){
-      if(e.key === 'Escape' || e.key === 'Esc') removeSplash();
-    }
+    function onKey(e){ if(e.key === 'Escape' || e.key === 'Esc') removeSplash(); }
     document.addEventListener('keydown', onKey);
 
-    // Clean up listeners when splash removed
-    setTimeout(()=>{
-      document.removeEventListener('keydown', onKey);
-      if(fallbackTimer) clearTimeout(fallbackTimer);
-    }, FALLBACK_MS + 800);
+    setTimeout(()=>{ document.removeEventListener('keydown', onKey); if(fallbackTimer) clearTimeout(fallbackTimer); }, FALLBACK_MS + 1200);
+  })();
+
+  (function(){
+    function polar(cx, cy, r, angleDeg){
+      const rad = (angleDeg * Math.PI) / 180;
+      return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
+    }
+
+    function buildGauge(containerId, value){
+      const size = 150, cx = 75, cy = 80, r = 60;
+
+      const zones = [
+        {from:0, to:40, color:"#E8A0A0"},
+        {from:40, to:70, color:"#F3CB7B"},
+        {from:70, to:100, color:"#7FCBA4"}
+      ];
+
+      function arcPath(fromPct, toPct){
+        const a1 = 180 - 180 * (fromPct/100);
+        const a2 = 180 - 180 * (toPct/100);
+        const p1 = polar(cx, cy, r, a1);
+        const p2 = polar(cx, cy, r, a2);
+        return `M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`;
+      }
+
+      let arcsSvg = "";
+      zones.forEach(z=>{
+        arcsSvg += `<path d="${arcPath(z.from, z.to)}" stroke="${z.color}" stroke-width="11" fill="none" stroke-linecap="butt" opacity="0.95"/>`;
+      });
+
+      let ticksSvg = "";
+      for(let t=0; t<=100; t+=20){
+        const a = 180 - 180*(t/100);
+        const p1 = polar(cx, cy, r+9, a);
+        const p2 = polar(cx, cy, r+14, a);
+        ticksSvg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#C7DCD1" stroke-width="2" stroke-linecap="round"/>`;
+      }
+
+      const needleAngle = 180 - 180 * (value/100);
+      const tip = polar(cx, cy, r - 14, needleAngle);
+      const baseL = polar(cx, cy, 6, needleAngle + 90);
+      const baseR = polar(cx, cy, 6, needleAngle - 90);
+      const back = polar(cx, cy, 10, needleAngle + 180);
+
+      const mascotDiameter = 18;
+      const mascotR = mascotDiameter / 2;
+
+      const svg = `
+        <svg width="${size}" height="98" viewBox="0 0 150 98" role="img" aria-label="gauge showing ${value} percent">
+          <defs>
+            <linearGradient id="needleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1FAE84"/>
+              <stop offset="100%" stop-color="#0E7C5A"/>
+            </linearGradient>
+            <filter id="needleShadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="1.6" stdDeviation="1.8" flood-color="#0E7C5A" flood-opacity="0.18"/>
+            </filter>
+
+            <clipPath id="mascotClip">
+              <circle cx="${cx}" cy="${cy}" r="${mascotR-1}"/>
+            </clipPath>
+          </defs>
+
+          ${arcsSvg}
+          ${ticksSvg}
+
+          <g filter="url(#needleShadow)">
+            <path d="M ${tip.x} ${tip.y}
+                     L ${baseR.x} ${baseR.y}
+                     L ${back.x} ${back.y}
+                     L ${baseL.x} ${baseL.y}
+                     Z"
+                  fill="url(#needleGrad)" stroke="#0E7C5A" stroke-width="0.6" stroke-linejoin="round"/>
+          </g>
+
+          <circle cx="${cx}" cy="${cy}" r="${mascotR + 1.5}" fill="#fff" stroke="#0E7C5A" stroke-width="3"/>
+
+          <image href="mascot.png" x="${cx - mascotR}" y="${cy - mascotR}" width="${mascotDiameter}" height="${mascotDiameter}" clip-path="url(#mascotClip)" preserveAspectRatio="xMidYMid slice"></image>
+
+        </svg>
+      `;
+      const container = document.getElementById(containerId);
+      if (container) container.innerHTML = svg;
+    }
+
+    const scoreEl = document.querySelector('.score-num');
+    const raw = scoreEl ? scoreEl.textContent.trim() : '';
+    const percent = Math.max(0, Math.min(100, parseInt(raw.replace(/[^\d]/g,''), 10) || 0));
+
+    buildGauge('gauge', percent);
   })();
 </script>
 </body>
